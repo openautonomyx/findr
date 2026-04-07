@@ -13,6 +13,11 @@ AutonomyX Finder investigates people, organizations, products, accounts, and inc
 - `autonomyx-finder/`
   - the skill bundle
   - references, assets, evals, and examples
+- `docs/liferay/`
+  - page map
+  - API contract
+  - data model
+  - deployment topology
 
 ## Use
 
@@ -38,6 +43,7 @@ Then restart Codex or start a new session so skill discovery refreshes.
 - eval pack
 - examples
 - user and runtime references
+- Liferay integration docs
 
 ## Highlights
 
