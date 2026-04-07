@@ -28,13 +28,8 @@ git push origin v1.0.0
 ## Configured public URLs
 
 - homepage: `https://findr.openautonomyx.com`
+- repository: `https://github.com/openautonomyx/findr`
 - privacy policy: `https://findr.openautonomyx.com/privacy`
 - terms of service: `https://findr.openautonomyx.com/terms`
 
-## Metadata still to fill
-
-Update these when you have the final public URLs:
-
-- repository URL
-
-The plugin manifest now uses the public site domain you provided. The repository URL is still blank because no Git remote URL was provided.
+The plugin manifest now includes the public site domain and GitHub repository URL you provided.
