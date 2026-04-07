@@ -1,0 +1,101 @@
+{
+  "name": "Okta-Slack Identity Fabric",
+  "search_mode": "identity fabric",
+  "schema_type": "Organization",
+  "summary": "The example identity fabric links a user account, Slack workspace, and Okta tenant through authentication and provisioning relations.",
+  "official_website": "https://www.okta.com",
+  "schema_record": {
+    "id": "thing:identity_fabric_1",
+    "schema_type": "Organization",
+    "name": "Okta-Slack Identity Fabric",
+    "topics": ["identity", "sso", "scim", "workspace_identity"],
+    "relations": [
+      { "type": "single_sign_on_with", "target": "thing:slack_workspace_1" },
+      { "type": "scim_provisioned_by", "target": "thing:okta_tenant_1" },
+      { "type": "has_account", "target": "thing:user_account_1" }
+    ]
+  },
+  "knowledge_graph": {
+    "nodes": [
+      { "id": "thing:user_1", "label": "User", "type": "Person" },
+      { "id": "thing:user_account_1", "label": "User Account", "type": "Intangible" },
+      { "id": "thing:slack_workspace_1", "label": "Slack Workspace", "type": "Organization" },
+      { "id": "thing:okta_tenant_1", "label": "Okta Tenant", "type": "Organization" }
+    ],
+    "edges": [
+      { "from": "thing:user_1", "type": "has_account", "to": "thing:user_account_1" },
+      { "from": "thing:user_account_1", "type": "member_of_workspace", "to": "thing:slack_workspace_1" },
+      { "from": "thing:slack_workspace_1", "type": "single_sign_on_with", "to": "thing:okta_tenant_1" },
+      { "from": "thing:user_account_1", "type": "scim_provisioned_by", "to": "thing:okta_tenant_1" }
+    ],
+    "mermaid": "graph TD\n  User[\"User\"]\n  Account[\"User Account\"]\n  Slack[\"Slack Workspace\"]\n  Okta[\"Okta Tenant\"]\n  User -->|has_account| Account\n  Account -->|member_of_workspace| Slack\n  Slack -->|single_sign_on_with| Okta\n  Account -->|scim_provisioned_by| Okta"
+  },
+  "resolution_result": {
+    "resolution": "matched",
+    "confidence": "high",
+    "evidence": [
+      "Official IdP and workspace relationship pattern",
+      "Normalized account and provisioning edges are internally consistent"
+    ],
+    "recommended_action": "enrich_only",
+    "source_of_information": ["Okta docs", "Slack docs"],
+    "trust_score": 0.94
+  },
+  "sort_filter_attributes": {
+    "relevancy": 0.95,
+    "recency": 0.8,
+    "contextuality": 0.97,
+    "source_tier": 1,
+    "trust_score": 0.94
+  },
+  "trace": {
+    "query": "Build an identity fabric for Okta, Slack, and a user account",
+    "search_mode": "identity fabric",
+    "source_candidates": [
+      {
+        "source": "Okta documentation",
+        "source_tier": 1,
+        "trust_score": 0.97,
+        "relevancy": 0.95,
+        "recency": 0.79,
+        "contextuality": 0.96
+      },
+      {
+        "source": "Slack documentation",
+        "source_tier": 1,
+        "trust_score": 0.95,
+        "relevancy": 0.93,
+        "recency": 0.78,
+        "contextuality": 0.95
+      }
+    ],
+    "classification": {
+      "schema_type": "Organization"
+    },
+    "resolution": {
+      "confidence": "high",
+      "recommended_action": "enrich_only"
+    },
+    "ranking_factors": [
+      "official identity-provider documentation",
+      "workspace identity context",
+      "SSO and SCIM relationship fit"
+    ]
+  },
+  "sources": [
+    {
+      "url": "https://www.okta.com",
+      "platform": "website",
+      "source_tier": 1,
+      "trust_score": 0.97,
+      "verification_status": "official_source"
+    },
+    {
+      "url": "https://slack.com",
+      "platform": "website",
+      "source_tier": 1,
+      "trust_score": 0.95,
+      "verification_status": "official_source"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  package-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: List package contents
+        run: |
+          test -f README.md
+          test -f autonomyx-finder/SKILL.md
+          test -f autonomyx-finder/agents/openai.yaml
+          test -f autonomyx-finder/assets/output-schema.json

@@ -1,0 +1,87 @@
+{
+  "name": "Example Hotel Cluster",
+  "search_mode": "hotel search",
+  "schema_type": "Place",
+  "summary": "A nearby hotel search in Bangalore was ranked using map relevance, proximity, ratings, and public trust/risk signals.",
+  "schema_record": {
+    "id": "thing:hotel_cluster_1",
+    "schema_type": "Place",
+    "name": "Example Hotel Cluster",
+    "topics": ["travel", "hospitality"],
+    "relations": [
+      { "type": "located_in", "target": "thing:bangalore" },
+      { "type": "nearby_to", "target": "thing:mg_road" }
+    ]
+  },
+  "action_record": {
+    "actor": "thing:user_search",
+    "action_type": "SearchAction",
+    "object": "hotel results",
+    "target": "thing:hotel_cluster_1",
+    "time": "2026-04-07T08:15:00+05:30",
+    "location": "Bangalore, India",
+    "source": "https://maps.google.com",
+    "source_tier": 1,
+    "confidence": "high",
+    "status": "verified"
+  },
+  "key_details": [
+    "Nearby search prioritized hotels near MG Road, Bangalore",
+    "Ranking considered location, distance, rating, review count, source tier, and trust score",
+    "Public risk signals were kept separate from verified hotel details"
+  ],
+  "knowledge_graph": {
+    "nodes": [
+      { "id": "thing:hotel_cluster_1", "label": "Hotel Cluster", "type": "Place" },
+      { "id": "thing:bangalore", "label": "Bangalore", "type": "AdministrativeArea" },
+      { "id": "thing:mg_road", "label": "MG Road", "type": "Place" }
+    ],
+    "edges": [
+      { "from": "thing:hotel_cluster_1", "type": "located_in", "to": "thing:bangalore" },
+      { "from": "thing:hotel_cluster_1", "type": "nearby_to", "to": "thing:mg_road" }
+    ],
+    "mermaid": "graph TD\n  Hotels[\"Hotel Cluster\"]\n  Bangalore[\"Bangalore\"]\n  MGRoad[\"MG Road\"]\n  Hotels -->|located_in| Bangalore\n  Hotels -->|nearby_to| MGRoad"
+  },
+  "recent_status": "Search run on April 7, 2026 using map and local business signals.",
+  "sort_filter_attributes": {
+    "location": "Bangalore, Karnataka, India",
+    "distance": 2.4,
+    "event_time": "2026-04-07T08:15:00+05:30",
+    "relevancy": 0.92,
+    "recency": 0.89,
+    "contextuality": 0.94,
+    "source_tier": 1,
+    "trust_score": 0.9
+  },
+  "important_data_points": {
+    "incident_type": "consumer_complaint",
+    "complaint_count": 2,
+    "latest_public_report_date": "2026-03-30",
+    "affected_region": "Bangalore",
+    "risk_signal": "news_coverage"
+  },
+  "caveats": [
+    "Complaint-like signals are public review/news signals, not proof of wrongdoing",
+    "Ranking favored local relevance and map trust over pure recency"
+  ],
+  "sources": [
+    {
+      "url": "https://maps.google.com",
+      "platform": "google_maps",
+      "source_tier": 1,
+      "trust_score": 0.95,
+      "published_at": "2026-04-07",
+      "location": "Bangalore, India",
+      "verification_status": "official_map_listing"
+    },
+    {
+      "url": "https://examplelocalnews.com/hotel-review-incident",
+      "platform": "local_news",
+      "source_tier": 2,
+      "trust_score": 0.74,
+      "published_at": "2026-03-30",
+      "location": "Bangalore, India",
+      "verification_status": "reported_publicly"
+    }
+  ]
+}

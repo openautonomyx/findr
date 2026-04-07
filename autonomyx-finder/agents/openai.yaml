@@ -1,0 +1,4 @@
+interface:
+  display_name: "AutonomyX Finder"
+  short_description: "Search the web, route to the right source, and answer typed discovery queries with schema output, a knowledge graph, and structured evidence."
+  default_prompt: "Use this skill when you need to identify the search mode, choose the best source, classify the subject, and answer with verified details, links, a schema record, and a knowledge graph."

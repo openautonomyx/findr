@@ -1,0 +1,74 @@
+{
+  "name": "Okta",
+  "search_mode": "named entity resolution",
+  "schema_type": "Organization",
+  "summary": "The official okta.com website and the LinkedIn company profile refer to the same organization, Okta.",
+  "official_website": "https://www.okta.com",
+  "schema_record": {
+    "id": "thing:okta",
+    "schema_type": "Organization",
+    "name": "Okta",
+    "identifiers": [
+      { "type": "domain", "value": "okta.com" },
+      { "type": "linkedin_company", "value": "okta-inc" }
+    ],
+    "industries": ["identity", "security", "saas"],
+    "profiles": [
+      { "platform": "website", "url": "https://www.okta.com" },
+      { "platform": "linkedin", "url": "https://www.linkedin.com/company/okta-inc/" }
+    ],
+    "relations": [
+      { "type": "same_as", "target": "https://www.linkedin.com/company/okta-inc/" }
+    ]
+  },
+  "knowledge_graph": {
+    "nodes": [
+      { "id": "thing:okta", "label": "Okta", "type": "Organization" },
+      { "id": "source:okta_site", "label": "okta.com", "type": "WebSite" },
+      { "id": "source:okta_linkedin", "label": "LinkedIn Company Profile", "type": "WebPage" }
+    ],
+    "edges": [
+      { "from": "thing:okta", "type": "documented_by", "to": "source:okta_site" },
+      { "from": "thing:okta", "type": "has_profile", "to": "source:okta_linkedin" }
+    ],
+    "mermaid": "graph TD\n  Okta[\"Okta\"]\n  Site[\"okta.com\"]\n  LinkedIn[\"LinkedIn Profile\"]\n  Okta -->|documented_by| Site\n  Okta -->|has_profile| LinkedIn"
+  },
+  "resolution_result": {
+    "resolution": "matched",
+    "confidence": "high",
+    "evidence": [
+      "Exact official domain match",
+      "LinkedIn profile naming and branding align with the official site",
+      "Public company identity is consistent across both sources"
+    ],
+    "recommended_action": "merge",
+    "source_of_information": ["Official website", "LinkedIn"],
+    "trust_score": 0.97
+  },
+  "sort_filter_attributes": {
+    "relevancy": 0.98,
+    "recency": 0.84,
+    "contextuality": 0.96,
+    "source_tier": 1,
+    "trust_score": 0.97
+  },
+  "caveats": [
+    "No private or internal records were used"
+  ],
+  "sources": [
+    {
+      "url": "https://www.okta.com",
+      "platform": "website",
+      "source_tier": 1,
+      "trust_score": 0.99,
+      "verification_status": "official_source"
+    },
+    {
+      "url": "https://www.linkedin.com/company/okta-inc/",
+      "platform": "linkedin",
+      "source_tier": 2,
+      "trust_score": 0.9,
+      "verification_status": "attributable_public_source"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "skill_name": "autonomyx-finder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Resolve whether these two records refer to the same organization: official site https://www.okta.com and LinkedIn company profile https://www.linkedin.com/company/okta-inc/. Return confidence, evidence, schema record, and knowledge graph.",
+      "expected_output": "Should identify the records as the same organization with high confidence, provide supporting evidence from domain and official profile linkage, and return a schema record plus graph.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Build an identity fabric for Okta, Slack, and a user account. Show account, workspace, SSO, SCIM, and provider relations. Return the result as schema record, relation edges, and SurrealDB-ready records.",
+      "expected_output": "Should produce normalized identity relations such as has_account, single_sign_on_with, scim_provisioned_by, member_of_workspace, and output thing/relation style records.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Check whether these two customer accounts are duplicates. Compare domain, location, provider identity, and public profiles. Recommend merge, review, or keep_separate and explain why.",
+      "expected_output": "Should return a resolution result with confidence, evidence, and a recommended_action without overclaiming.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Enrich this organization using official site, LinkedIn, G2, Google Business, and public news. Include industries, profiles, important data points, trust-aware source handling, and a knowledge graph.",
+      "expected_output": "Should return structured enrichment including industries, profiles, source-aware evidence, and graph edges.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Find public signals for this person including promotion, relocation, social-only life-event updates, bans, complaints, and other important data points. Keep social-only claims labeled clearly.",
+      "expected_output": "Should distinguish verified findings from reported_publicly or social_only signals and include trust-aware provenance.",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "Find nearby coworking spaces in Bangalore and rank them by location, rating, relevancy, recency, contextuality, and trust_score. Explain the ranking and include sort/filter attributes.",
+      "expected_output": "Should surface local results with map-aware ranking attributes and explain the ranking tradeoffs.",
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "From these public sources, create an action record showing who did what, when, where, and upon whom. Include source_of_information, trust_score, and action type classification.",
+      "expected_output": "Should return a structured action record with actor, action_type, target, time, location, source, trust score, and status.",
+      "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "Map the ecosystem around a social cause, identifying nonprofits, campaigns, sponsors, partners, and public advocates. Return schema records, important data points, and a knowledge graph.",
+      "expected_output": "Should identify multiple related entities, preserve source trust distinctions, and return a useful graph.",
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "Compare Okta and Microsoft Entra for SSO, SCIM, app directory coverage, and workspace identity relationships. Return normalized attributes and relation edges.",
+      "expected_output": "Should compare identity providers using official docs and output normalized identity-related relations.",
+      "files": []
+    },
+    {
+      "id": 10,
+      "prompt": "Return the result of this enrichment as SurrealDB-ready thing, action, source, and relation records.",
+      "expected_output": "Should shape the output into storage-ready records instead of only prose.",
+      "files": []
+    }
+  ]
+}
