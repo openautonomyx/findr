@@ -25,13 +25,16 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
+## Configured public URLs
+
+- homepage: `https://findr.openautonomyx.com`
+- privacy policy: `https://findr.openautonomyx.com/privacy`
+- terms of service: `https://findr.openautonomyx.com/terms`
+
 ## Metadata still to fill
 
 Update these when you have the final public URLs:
 
-- plugin homepage URL
 - repository URL
-- privacy policy URL
-- terms of service URL
 
-The plugin manifest currently uses working local metadata but leaves public URLs blank rather than inventing values.
+The plugin manifest now uses the public site domain you provided. The repository URL is still blank because no Git remote URL was provided.
