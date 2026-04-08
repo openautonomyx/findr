@@ -1,11 +1,15 @@
-import os
-
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseModel):
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
     api_title: str = "AutonomyX Finder API"
     api_version: str = "0.1.0"
     api_prefix: str = "/o/findr-api"
@@ -28,19 +32,4 @@ class Settings(BaseModel):
     programmable_search_engine_id: Optional[str] = None
 
 
-settings = Settings(
-    api_title=os.getenv("API_TITLE", "AutonomyX Finder API"),
-    api_version=os.getenv("API_VERSION", "0.1.0"),
-    surrealdb_url=os.getenv("SURREALDB_URL"),
-    opensearch_url=os.getenv("OPENSEARCH_URL"),
-    redis_url=os.getenv("REDIS_URL"),
-    surrealdb_namespace=os.getenv("SURREALDB_NAMESPACE", "findr"),
-    surrealdb_database=os.getenv("SURREALDB_DATABASE", "findr"),
-    surrealdb_user=os.getenv("SURREALDB_USER", "root"),
-    surrealdb_password=os.getenv("SURREALDB_PASSWORD", "root"),
-    opensearch_index=os.getenv("OPENSEARCH_INDEX", "findr-search"),
-    redis_ttl_seconds=int(os.getenv("REDIS_TTL_SECONDS", "300")),
-    request_timeout_seconds=float(os.getenv("REQUEST_TIMEOUT_SECONDS", "10")),
-    programmable_search_api_key=os.getenv("PROGRAMMABLE_SEARCH_API_KEY"),
-    programmable_search_engine_id=os.getenv("PROGRAMMABLE_SEARCH_ENGINE_ID"),
-)
+settings = Settings()

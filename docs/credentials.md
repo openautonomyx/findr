@@ -1,0 +1,107 @@
+# Credentials
+
+Use local `.env` files for development and your deployment platform's secret store for production.
+
+## API
+
+File:
+
+```text
+apps/findr-api/.env
+```
+
+Start from:
+
+```text
+apps/findr-api/.env.example
+```
+
+Important variables:
+
+- `SURREALDB_URL`
+- `SURREALDB_NAMESPACE`
+- `SURREALDB_DATABASE`
+- `SURREALDB_USER`
+- `SURREALDB_PASSWORD`
+- `OPENSEARCH_URL`
+- `OPENSEARCH_INDEX`
+- `REDIS_URL`
+- `PROGRAMMABLE_SEARCH_API_KEY`
+- `PROGRAMMABLE_SEARCH_ENGINE_ID`
+
+Example local API file:
+
+```dotenv
+API_TITLE=AutonomyX Finder API
+API_VERSION=0.1.0
+SURREALDB_URL=http://localhost:8001/rpc
+SURREALDB_NAMESPACE=findr
+SURREALDB_DATABASE=findr
+SURREALDB_USER=root
+SURREALDB_PASSWORD=root
+OPENSEARCH_URL=http://localhost:9200
+OPENSEARCH_INDEX=findr-search
+REDIS_URL=redis://localhost:6379/0
+REDIS_TTL_SECONDS=300
+REQUEST_TIMEOUT_SECONDS=10
+PROGRAMMABLE_SEARCH_API_KEY=
+PROGRAMMABLE_SEARCH_ENGINE_ID=
+```
+
+The API now loads `.env` automatically through `pydantic-settings`.
+
+## Frontend
+
+File:
+
+```text
+apps/findr-liferay-client-extension/.env
+```
+
+Start from:
+
+```text
+apps/findr-liferay-client-extension/.env.example
+```
+
+Important variables:
+
+- `VITE_FINDR_API_BASE`
+- `VITE_FINDR_APP_BASE`
+
+Example local frontend file:
+
+```dotenv
+VITE_FINDR_API_BASE=http://localhost:8000
+VITE_FINDR_APP_BASE=/web/findr
+```
+
+## Docker Compose
+
+For local container runs, `docker-compose.yml` already provides default service URLs for:
+
+- `findr-api`
+- `surrealdb`
+- `opensearch`
+- `redis`
+
+Do not hardcode production secrets into `docker-compose.yml`.
+
+## Production
+
+For production deployment, inject the same variables from your hosting platform or CI/CD secret manager.
+
+Recommended rule:
+
+- local development: `.env`
+- shared non-secret defaults: `.env.example`
+- production: secret manager or platform environment configuration
+
+## Current External Credential Need
+
+Only these provider credentials are currently consumed by live code paths:
+
+- `PROGRAMMABLE_SEARCH_API_KEY`
+- `PROGRAMMABLE_SEARCH_ENGINE_ID`
+
+Other providers such as Google Maps, G2, and LinkedIn are still routed as catalog placeholders until live connectors are implemented.

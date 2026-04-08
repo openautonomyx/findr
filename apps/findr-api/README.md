@@ -9,8 +9,11 @@ cd apps/findr-api
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
+cp .env.example .env
 uvicorn app.main:app --reload --port 8000
 ```
+
+The API reads credentials and service URLs from `.env` automatically.
 
 ## First endpoint
 
@@ -39,3 +42,17 @@ docker run --rm -p 8000:8000 findr-api
 ## Storage Health
 
 - `GET /o/findr-api/health/storage`
+
+## Credentials
+
+Use:
+
+```text
+apps/findr-api/.env
+```
+
+Reference:
+
+```text
+docs/credentials.md
+```

@@ -24,6 +24,10 @@ AutonomyX Finder investigates people, organizations, products, accounts, and inc
   - API contract
   - data model
   - deployment topology
+- `docs/credentials.md`
+  - local `.env` setup
+  - production secret placement
+  - currently used provider credentials
 
 ## Use
 
@@ -84,3 +88,5 @@ Initial public release of AutonomyX Finder for entity resolution, enrichment, ev
 
 - This export is git-initialized for easy publishing.
 - The backward-compatible `entity-finder` alias is not included in this repo export.
+- API credentials go in `apps/findr-api/.env`.
+- frontend env goes in `apps/findr-liferay-client-extension/.env`.
