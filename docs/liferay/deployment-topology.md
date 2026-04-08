@@ -78,6 +78,15 @@ Suggested containers:
 - `redis`
 - optional `nginx` or ingress
 
+## Recommended Auth Topology
+
+Use same-origin proxying so:
+
+- `/web/findr` is served by Liferay
+- `/o/findr-api` is proxied to Finder API
+- the proxy or portal layer injects trusted Finder auth headers
+- the browser stays in `proxy` auth mode and does not need the Finder shared secret
+
 ## Deployment Notes
 
 - keep `SurrealDB`, `OpenSearch`, `Redis`, and object storage on private network paths

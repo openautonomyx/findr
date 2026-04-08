@@ -116,6 +116,21 @@ Use a Liferay client extension or custom module with:
 - React frontend
 - role-aware route rendering
 - API calls to `/o/findr-api`
+- proxy-mode auth by default
+
+Recommended page bootstrap:
+
+```html
+<script>
+  window.Liferay = window.Liferay || {};
+  window.Liferay.FINDR_CONFIG = {
+    apiBase: "https://www.openautonomyx.com",
+    appBase: "/web/findr",
+    authMode: "proxy",
+    roles: ["findr-user"]
+  };
+</script>
+```
 
 Recommended roles:
 

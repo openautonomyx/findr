@@ -14,6 +14,7 @@ declare global {
       FINDR_CONFIG?: Partial<{
         apiBase: string;
         appBase: string;
+        authMode: "proxy" | "browserHeaders";
         sharedSecret: string;
         roles: string[];
       }>;
@@ -53,6 +54,11 @@ function deriveRuntimeConfig(element: HTMLElement): FinderRuntimeConfig {
       globalConfig.appBase ||
       (import.meta.env.VITE_FINDR_APP_BASE as string | undefined) ||
       "/web/findr",
+    authMode:
+      (element.dataset.authMode as "proxy" | "browserHeaders" | undefined) ||
+      globalConfig.authMode ||
+      ((import.meta.env.VITE_FINDR_AUTH_MODE as "proxy" | "browserHeaders" | undefined) ??
+        "proxy"),
     auth: {
       userId:
         element.dataset.userId ||

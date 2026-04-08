@@ -28,6 +28,9 @@ export async function runSearch(
 }
 
 function buildAuthHeaders(config: FinderRuntimeConfig): Record<string, string> {
+  if (config.authMode !== "browserHeaders") {
+    return {};
+  }
   const headers: Record<string, string> = {};
   if (config.auth.userId) {
     headers["X-Findr-User-Id"] = config.auth.userId;

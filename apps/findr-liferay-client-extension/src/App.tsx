@@ -74,6 +74,9 @@ export function App({ config }: AppProps) {
       <p style={{ color: "#555", marginTop: 8 }}>
         Viewer: <strong>{viewer}</strong>
       </p>
+      <p style={{ color: "#555", marginTop: 4 }}>
+        Auth mode: <strong>{config.authMode}</strong>
+      </p>
 
       <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12, marginTop: 24 }}>
         <input

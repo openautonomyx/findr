@@ -72,6 +72,7 @@ Important variables:
 
 - `VITE_FINDR_API_BASE`
 - `VITE_FINDR_APP_BASE`
+- `VITE_FINDR_AUTH_MODE`
 - `VITE_FINDR_SHARED_SECRET`
 
 Example local frontend file:
@@ -79,6 +80,7 @@ Example local frontend file:
 ```dotenv
 VITE_FINDR_API_BASE=http://localhost:8000
 VITE_FINDR_APP_BASE=/web/findr
+VITE_FINDR_AUTH_MODE=proxy
 VITE_FINDR_SHARED_SECRET=
 ```
 
@@ -118,6 +120,7 @@ Recommended production setup:
 
 - keep `AUTH_REQUIRED=true` in the API
 - inject a trusted `TRUSTED_SHARED_SECRET` only on the server side or trusted proxy path
+- keep the frontend in `VITE_FINDR_AUTH_MODE=proxy`
 - have the Liferay page or proxy send:
   - `X-Findr-User-Id`
   - `X-Findr-User-Name`
@@ -125,3 +128,7 @@ Recommended production setup:
   - `X-Findr-Shared-Secret`
 
 Do not expose a long-lived shared secret to public browser code if you can avoid it. Prefer a same-origin trusted proxy, API gateway, or Liferay-backed server-side injection path.
+
+Reference:
+
+- [docs/liferay/auth-proxy.md](./liferay/auth-proxy.md)

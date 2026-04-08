@@ -24,7 +24,9 @@ npm run dev
 ```
 
 Use `VITE_FINDR_API_BASE` to point the UI to the Finder API outside Liferay.
-Use `VITE_FINDR_SHARED_SECRET` only when the API expects a trusted shared secret in non-production or proxy setups.
+Use `VITE_FINDR_AUTH_MODE=proxy` for production-style same-origin auth.
+Use `VITE_FINDR_AUTH_MODE=browserHeaders` only for local or controlled integration testing where the browser is allowed to send Finder headers directly.
+Use `VITE_FINDR_SHARED_SECRET` only with `browserHeaders`, and avoid that mode in production.
 
 ## Liferay Packaging
 
@@ -45,6 +47,7 @@ The custom element can receive runtime values from:
 - `window.Liferay.FINDR_CONFIG`
 - custom element `data-*` attributes such as:
   - `data-api-base`
+  - `data-auth-mode`
   - `data-user-id`
   - `data-user-name`
   - `data-roles`

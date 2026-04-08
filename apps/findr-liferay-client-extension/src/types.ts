@@ -20,6 +20,7 @@ export type FinderAuthContext = {
 export type FinderRuntimeConfig = {
   apiBase: string;
   appBase: string;
+  authMode: "proxy" | "browserHeaders";
   auth: FinderAuthContext;
 };
 
