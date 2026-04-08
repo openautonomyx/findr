@@ -1,4 +1,5 @@
-from .models import SearchRequest, SearchResponse, SourceCandidate
+from .models import SearchRequest, SearchResponse, SearchTrace
+from .providers import select_providers, stub_sources_for_providers
 
 
 def build_search_response(request: SearchRequest) -> SearchResponse:
@@ -6,19 +7,13 @@ def build_search_response(request: SearchRequest) -> SearchResponse:
     location = request.filters.location or "global"
     schema_type = request.filters.schema_type or "Thing"
     query_slug = request.query.strip().lower().replace(" ", "_")
+    plans = select_providers(request)
 
-    sources = [
-        SourceCandidate(
-            label="Official site",
-            url="https://findr.openautonomyx.com",
-            source_tier=1,
-            trust_score=0.98,
-        )
-    ]
+    sources = stub_sources_for_providers(plans)
 
     summary = (
         f"Stub search result for '{request.query}' using {request.depth_mode} mode"
-        f" with location context '{location}'."
+        f" with location context '{location}' via {', '.join(plan.provider for plan in plans)}."
     )
 
     return SearchResponse(
@@ -45,11 +40,14 @@ def build_search_response(request: SearchRequest) -> SearchResponse:
             ],
         },
         sources=sources,
-        trace={
-            "query": request.query,
-            "search_mode": request.search_mode,
-            "depth_mode": request.depth_mode,
-            "filters": filters,
-            "ranking_factors": ["source_tier", "trust_score", "location"],
-        },
+        trace=SearchTrace(
+            query=request.query,
+            search_mode=request.search_mode,
+            depth_mode=request.depth_mode,
+            filters=filters,
+            selected_providers=plans,
+            ranking_factors=["provider_priority", "source_tier", "trust_score", "location"],
+        )
+        if request.include_trace
+        else None,
     )

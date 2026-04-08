@@ -1,0 +1,12 @@
+assemble:
+  - from: build
+    into: static
+
+findr-custom-element:
+  friendlyURLMapping: findr
+  htmlElementName: findr-web
+  instanceable: false
+  name: AutonomyX Finder
+  type: customElement
+  urls:
+    - static/assets/index.js

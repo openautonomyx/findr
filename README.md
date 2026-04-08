@@ -18,7 +18,7 @@ AutonomyX Finder investigates people, organizations, products, accounts, and inc
 - `apps/findr-liferay-client-extension/`
   - React shell for `/web/findr`
 - `docker-compose.yml`
-  - local API + UI integration slice
+  - local API + UI + SurrealDB/OpenSearch/Redis integration slice
 - `docs/liferay/`
   - page map
   - API contract

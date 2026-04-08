@@ -4,6 +4,14 @@ services:
   findr-api:
     build:
       context: ./apps/findr-api
+    environment:
+      SURREALDB_URL: http://surrealdb:8000/rpc
+      OPENSEARCH_URL: http://opensearch:9200
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - surrealdb
+      - opensearch
+      - redis
     ports:
       - "8000:8000"
 
@@ -16,3 +24,23 @@ services:
       - findr-api
     ports:
       - "5173:5173"
+
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    command: start --log info --user root --pass root memory
+    ports:
+      - "8001:8000"
+
+  opensearch:
+    image: opensearchproject/opensearch:2.14.0
+    environment:
+      discovery.type: single-node
+      plugins.security.disabled: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"

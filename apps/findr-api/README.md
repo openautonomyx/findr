@@ -16,7 +16,13 @@ uvicorn app.main:app --reload --port 8000
 
 - `POST /o/findr-api/search`
 
-This scaffold returns a structured stub response that matches the project runtime shape closely enough for frontend integration and further implementation.
+This scaffold now includes:
+
+- provider selection and routing stubs
+- structured search trace output
+- storage health endpoint for SurrealDB/OpenSearch/Redis wiring
+
+Current implementation is still a structured stub, but no longer a single hard-coded source path.
 
 ## Container
 
@@ -24,3 +30,7 @@ This scaffold returns a structured stub response that matches the project runtim
 docker build -t findr-api .
 docker run --rm -p 8000:8000 findr-api
 ```
+
+## Storage Health
+
+- `GET /o/findr-api/health/storage`

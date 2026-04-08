@@ -23,3 +23,11 @@ npm run dev
 ```
 
 Use `VITE_FINDR_API_BASE` to point the UI to the Finder API outside Liferay.
+
+## Liferay Packaging
+
+Included:
+
+- `client-extension.yaml`
+
+This is a starter descriptor for a custom element style client extension. Adjust asset paths after the first production build if your Liferay packaging pipeline outputs different filenames.

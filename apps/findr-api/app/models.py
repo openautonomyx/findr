@@ -25,6 +25,7 @@ class SearchRequest(BaseModel):
     search_mode: str = "standard_search"
     depth_mode: DepthMode = "fast pass"
     filters: SearchFilters = Field(default_factory=SearchFilters)
+    include_trace: bool = True
 
 
 class SourceCandidate(BaseModel):
@@ -32,6 +33,22 @@ class SourceCandidate(BaseModel):
     url: str
     source_tier: int
     trust_score: float
+    provider: str
+
+
+class ProviderPlan(BaseModel):
+    provider: str
+    reason: str
+    priority: int
+
+
+class SearchTrace(BaseModel):
+    query: str
+    search_mode: str
+    depth_mode: str
+    filters: dict[str, Any]
+    selected_providers: list[ProviderPlan]
+    ranking_factors: list[str]
 
 
 class SearchResponse(BaseModel):
@@ -41,4 +58,4 @@ class SearchResponse(BaseModel):
     schema_record: dict[str, Any]
     knowledge_graph: dict[str, Any]
     sources: list[SourceCandidate]
-    trace: dict[str, Any]
+    trace: SearchTrace | None = None
