@@ -62,3 +62,10 @@ class SearchResponse(BaseModel):
     knowledge_graph: dict[str, Any]
     sources: list[SourceCandidate]
     trace: Optional[SearchTrace] = None
+
+
+class AuthContext(BaseModel):
+    user_id: str
+    user_name: Optional[str] = None
+    roles: list[str]
+    authenticated_via: str

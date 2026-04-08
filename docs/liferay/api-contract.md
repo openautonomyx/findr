@@ -9,8 +9,30 @@ https://www.openautonomyx.com/o/findr-api
 ## Auth Model
 
 - Liferay authenticates the user
-- Finder API receives Liferay-backed identity or a trusted service token
+- Finder API receives Liferay-backed identity headers and an optional trusted shared secret
 - API enforces route access from Liferay roles
+
+Recommended request headers:
+
+- `X-Findr-User-Id`
+- `X-Findr-User-Name`
+- `X-Findr-Roles`
+- `X-Findr-Shared-Secret`
+
+Useful auth endpoint:
+
+### `GET /o/findr-api/me`
+
+Returns normalized viewer context:
+
+```json
+{
+  "user_id": "20101",
+  "user_name": "Analyst User",
+  "roles": ["findr-analyst"],
+  "authenticated_via": "liferay-header"
+}
+```
 
 ## Core Endpoints
 

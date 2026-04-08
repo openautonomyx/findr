@@ -28,6 +28,8 @@ Important variables:
 - `REDIS_URL`
 - `PROGRAMMABLE_SEARCH_API_KEY`
 - `PROGRAMMABLE_SEARCH_ENGINE_ID`
+- `AUTH_REQUIRED`
+- `TRUSTED_SHARED_SECRET`
 
 Example local API file:
 
@@ -46,6 +48,8 @@ REDIS_TTL_SECONDS=300
 REQUEST_TIMEOUT_SECONDS=10
 PROGRAMMABLE_SEARCH_API_KEY=
 PROGRAMMABLE_SEARCH_ENGINE_ID=
+AUTH_REQUIRED=false
+TRUSTED_SHARED_SECRET=
 ```
 
 The API now loads `.env` automatically through `pydantic-settings`.
@@ -68,12 +72,14 @@ Important variables:
 
 - `VITE_FINDR_API_BASE`
 - `VITE_FINDR_APP_BASE`
+- `VITE_FINDR_SHARED_SECRET`
 
 Example local frontend file:
 
 ```dotenv
 VITE_FINDR_API_BASE=http://localhost:8000
 VITE_FINDR_APP_BASE=/web/findr
+VITE_FINDR_SHARED_SECRET=
 ```
 
 ## Docker Compose
@@ -105,3 +111,17 @@ Only these provider credentials are currently consumed by live code paths:
 - `PROGRAMMABLE_SEARCH_ENGINE_ID`
 
 Other providers such as Google Maps, G2, and LinkedIn are still routed as catalog placeholders until live connectors are implemented.
+
+## Liferay Auth Integration
+
+Recommended production setup:
+
+- keep `AUTH_REQUIRED=true` in the API
+- inject a trusted `TRUSTED_SHARED_SECRET` only on the server side or trusted proxy path
+- have the Liferay page or proxy send:
+  - `X-Findr-User-Id`
+  - `X-Findr-User-Name`
+  - `X-Findr-Roles`
+  - `X-Findr-Shared-Secret`
+
+Do not expose a long-lived shared secret to public browser code if you can avoid it. Prefer a same-origin trusted proxy, API gateway, or Liferay-backed server-side injection path.

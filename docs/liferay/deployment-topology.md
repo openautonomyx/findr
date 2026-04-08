@@ -31,6 +31,7 @@ Responsibilities:
 - role-based access
 - UI shell
 - case and dashboard views
+- injection of Finder user context into the client extension or trusted proxy path
 
 ### Finder API
 
@@ -82,6 +83,7 @@ Suggested containers:
 - keep `SurrealDB`, `OpenSearch`, `Redis`, and object storage on private network paths
 - expose only Liferay and the API ingress publicly
 - if Liferay proxies the API internally, prefer same-origin routing through `/o/findr-api`
+- if possible, inject the shared secret server-side or at the proxy layer instead of exposing it directly to public browser code
 - use async jobs for deep research and crawl-heavy modes
 - keep alert delivery outbound-only
 

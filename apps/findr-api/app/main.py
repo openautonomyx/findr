@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .auth import require_auth_context
 from .config import settings
-from .models import SearchRequest, SearchResponse
+from .models import AuthContext, SearchRequest, SearchResponse
 from .search import build_search_response
 from .storage import StorageTargets, storage_health
 
@@ -33,6 +34,14 @@ def health_storage() -> dict[str, str]:
     ).model_dump()
 
 
+@app.get(f"{settings.api_prefix}/me", response_model=AuthContext)
+def me(context: AuthContext = Depends(require_auth_context)) -> AuthContext:
+    return context
+
+
 @app.post(f"{settings.api_prefix}/search", response_model=SearchResponse)
-def search(request: SearchRequest) -> SearchResponse:
+def search(
+    request: SearchRequest,
+    _: AuthContext = Depends(require_auth_context),
+) -> SearchResponse:
     return build_search_response(request)

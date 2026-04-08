@@ -10,6 +10,19 @@ export type SearchRequest = {
   };
 };
 
+export type FinderAuthContext = {
+  userId: string;
+  userName?: string;
+  roles: string[];
+  sharedSecret?: string;
+};
+
+export type FinderRuntimeConfig = {
+  apiBase: string;
+  appBase: string;
+  auth: FinderAuthContext;
+};
+
 export type SearchResponse = {
   search_mode: string;
   schema_type: string;

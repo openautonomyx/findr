@@ -24,6 +24,7 @@ This scaffold now includes:
 - provider selection and live provider execution where supported
 - structured search trace output
 - storage health endpoint for SurrealDB/OpenSearch/Redis wiring
+- role-aware Liferay header authentication support
 
 Current implementation:
 
@@ -42,6 +43,19 @@ docker run --rm -p 8000:8000 findr-api
 ## Storage Health
 
 - `GET /o/findr-api/health/storage`
+
+## Auth
+
+When `AUTH_REQUIRED=true`, the API expects trusted Liferay-style headers:
+
+- `X-Findr-User-Id`
+- `X-Findr-User-Name`
+- `X-Findr-Roles`
+- `X-Findr-Shared-Secret`
+
+Useful endpoint:
+
+- `GET /o/findr-api/me`
 
 ## Credentials
 

@@ -1,20 +1,47 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
-import { runSearch } from "./api";
-import type { SearchResponse } from "./types";
+import { getViewer, runSearch } from "./api";
+import type { FinderRuntimeConfig, SearchResponse } from "./types";
 
 const initialFilters = {
   location: "",
   time: "",
 };
 
-export function App() {
+type AppProps = {
+  config: FinderRuntimeConfig;
+};
+
+export function App({ config }: AppProps) {
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState(initialFilters.location);
   const [time, setTime] = useState(initialFilters.time);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<SearchResponse | null>(null);
+  const [viewer, setViewer] = useState<string>(
+    config.auth.userName || config.auth.userId || "anonymous",
+  );
+
+  async function loadViewer() {
+    try {
+      const response = await getViewer(config);
+      if (!response.ok) {
+        return;
+      }
+      const payload = (await response.json()) as {
+        user_id: string;
+        user_name?: string;
+      };
+      setViewer(payload.user_name || payload.user_id);
+    } catch {
+      // Keep the locally derived viewer when the API is unreachable.
+    }
+  }
+
+  useEffect(() => {
+    void loadViewer();
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,7 +49,8 @@ export function App() {
     setError(null);
 
     try {
-      const response = await runSearch({
+      await loadViewer();
+      const response = await runSearch(config, {
         query,
         search_mode: "standard_search",
         depth_mode: "fast pass",
@@ -43,6 +71,9 @@ export function App() {
     <main style={{ fontFamily: "sans-serif", margin: "0 auto", maxWidth: 960, padding: 24 }}>
       <h1>AutonomyX Finder</h1>
       <p>Investigate entities, enrich evidence, and render graph-ready answers.</p>
+      <p style={{ color: "#555", marginTop: 8 }}>
+        Viewer: <strong>{viewer}</strong>
+      </p>
 
       <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12, marginTop: 24 }}>
         <input

@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     request_timeout_seconds: float = 10.0
     programmable_search_api_key: Optional[str] = None
     programmable_search_engine_id: Optional[str] = None
+    auth_required: bool = False
+    trusted_shared_secret: Optional[str] = None
+    default_search_roles: str = "findr-user,findr-analyst,findr-admin"
 
 
 settings = Settings()
