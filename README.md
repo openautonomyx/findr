@@ -17,6 +17,8 @@ AutonomyX Finder investigates people, organizations, products, accounts, and inc
   - FastAPI starter with `POST /o/findr-api/search`
 - `apps/findr-liferay-client-extension/`
   - React shell for `/web/findr`
+- `docker-compose.yml`
+  - local API + UI integration slice
 - `docs/liferay/`
   - page map
   - API contract

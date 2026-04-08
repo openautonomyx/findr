@@ -5,6 +5,7 @@ def build_search_response(request: SearchRequest) -> SearchResponse:
     filters = {k: v for k, v in request.filters.model_dump().items() if v is not None}
     location = request.filters.location or "global"
     schema_type = request.filters.schema_type or "Thing"
+    query_slug = request.query.strip().lower().replace(" ", "_")
 
     sources = [
         SourceCandidate(
@@ -28,14 +29,19 @@ def build_search_response(request: SearchRequest) -> SearchResponse:
             "schema_type": schema_type,
             "name": request.query,
             "filters": filters,
+            "canonical_id": f"thing:{query_slug}",
         },
         knowledge_graph={
             "nodes": [
-                {"id": "thing:query", "label": request.query, "type": schema_type},
+                {"id": f"thing:{query_slug}", "label": request.query, "type": schema_type},
                 {"id": "source:official", "label": "Official site", "type": "Source"},
             ],
             "edges": [
-                {"from": "thing:query", "to": "source:official", "type": "documented_by"}
+                {
+                    "from": f"thing:{query_slug}",
+                    "to": "source:official",
+                    "type": "documented_by",
+                }
             ],
         },
         sources=sources,
