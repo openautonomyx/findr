@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "findr-api"
+version = "0.1.0"
+description = "Finder API scaffold for Liferay integration"
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn>=0.30.0",
+  "pydantic>=2.7.0"
+]
+
+[tool.setuptools]
+packages = ["app"]

@@ -13,6 +13,10 @@ AutonomyX Finder investigates people, organizations, products, accounts, and inc
 - `autonomyx-finder/`
   - the skill bundle
   - references, assets, evals, and examples
+- `apps/findr-api/`
+  - FastAPI starter with `POST /o/findr-api/search`
+- `apps/findr-liferay-client-extension/`
+  - React shell for `/web/findr`
 - `docs/liferay/`
   - page map
   - API contract
