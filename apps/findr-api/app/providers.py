@@ -1,7 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
+from urllib.parse import quote, urlparse
 
+import httpx
+
+from .config import settings
 from .models import ProviderPlan, SearchRequest, SourceCandidate
 
 
@@ -45,7 +50,7 @@ def select_providers(request: SearchRequest) -> list[ProviderPlan]:
 
     if not plans:
         plans.append(
-            ProviderPlan(provider="official_web", reason="default official web routing", priority=1)
+            ProviderPlan(provider="wikipedia", reason="default topic-capable public source", priority=1)
         )
         plans.append(
             ProviderPlan(
@@ -61,7 +66,111 @@ def select_providers(request: SearchRequest) -> list[ProviderPlan]:
     return list(deduped.values())
 
 
-def stub_sources_for_providers(plans: list[ProviderPlan]) -> list[SourceCandidate]:
+def resolve_provider_sources(request: SearchRequest, plans: list[ProviderPlan]) -> list[SourceCandidate]:
+    sources: list[SourceCandidate] = []
+    with httpx.Client(timeout=settings.request_timeout_seconds, follow_redirects=True) as client:
+        for plan in plans:
+            if plan.provider == "wikipedia":
+                sources.extend(fetch_wikipedia_sources(client, request.query))
+            elif plan.provider == "programmable_search":
+                sources.extend(fetch_programmable_search_sources(client, request.query))
+            elif plan.provider == "official_web":
+                sources.extend(fetch_official_web_sources(client, request.query))
+            elif plan.provider == "google_maps":
+                sources.extend(build_catalog_source("google_maps"))
+            elif plan.provider == "g2":
+                sources.extend(build_catalog_source("g2"))
+            elif plan.provider == "linkedin":
+                sources.extend(build_catalog_source("linkedin"))
+            elif plan.provider == "logs":
+                sources.extend(build_catalog_source("logs"))
+
+    return dedupe_sources(sources)
+
+
+def fetch_wikipedia_sources(client: httpx.Client, query: str) -> list[SourceCandidate]:
+    title = quote(query.replace(" ", "_"))
+    url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}"
+    try:
+        response = client.get(url)
+        response.raise_for_status()
+        payload = response.json()
+    except Exception:
+        return []
+
+    page_url = payload.get("content_urls", {}).get("desktop", {}).get("page")
+    if not page_url:
+        return []
+    return [
+        SourceCandidate(
+            label=payload.get("title", "Wikipedia"),
+            url=page_url,
+            source_tier=2,
+            trust_score=0.78,
+            provider="wikipedia",
+            snippet=payload.get("extract"),
+        )
+    ]
+
+
+def fetch_programmable_search_sources(client: httpx.Client, query: str) -> list[SourceCandidate]:
+    if not settings.programmable_search_api_key or not settings.programmable_search_engine_id:
+        return []
+
+    try:
+        response = client.get(
+            "https://customsearch.googleapis.com/customsearch/v1",
+            params={
+                "key": settings.programmable_search_api_key,
+                "cx": settings.programmable_search_engine_id,
+                "q": query,
+            },
+        )
+        response.raise_for_status()
+        payload = response.json()
+    except Exception:
+        return []
+
+    items = payload.get("items", [])[:3]
+    return [
+        SourceCandidate(
+            label=item.get("title", item.get("link", "Search result")),
+            url=item["link"],
+            source_tier=2,
+            trust_score=0.8,
+            provider="programmable_search",
+            snippet=item.get("snippet"),
+        )
+        for item in items
+        if item.get("link")
+    ]
+
+
+def fetch_official_web_sources(client: httpx.Client, query: str) -> list[SourceCandidate]:
+    domain = normalize_domain(query)
+    if not domain:
+        return []
+
+    url = f"https://{domain}"
+    try:
+        response = client.get(url)
+        response.raise_for_status()
+    except Exception:
+        return []
+
+    return [
+        SourceCandidate(
+            label=domain,
+            url=str(response.url),
+            source_tier=1,
+            trust_score=0.98,
+            provider="official_web",
+            snippet=response.text[:200].strip() if response.text else None,
+        )
+    ]
+
+
+def build_catalog_source(provider: str) -> list[SourceCandidate]:
     catalog: dict[str, ProviderDefinition] = {
         "google_maps": ProviderDefinition(
             name="Google Maps",
@@ -70,22 +179,6 @@ def stub_sources_for_providers(plans: list[ProviderPlan]) -> list[SourceCandidat
             source_tier=1,
             trust_score=0.95,
             url="https://maps.google.com",
-        ),
-        "wikipedia": ProviderDefinition(
-            name="Wikipedia",
-            reason="topic orientation",
-            priority=1,
-            source_tier=2,
-            trust_score=0.78,
-            url="https://www.wikipedia.org",
-        ),
-        "official_web": ProviderDefinition(
-            name="Official Web",
-            reason="first-party source",
-            priority=1,
-            source_tier=1,
-            trust_score=0.98,
-            url="https://findr.openautonomyx.com",
         ),
         "g2": ProviderDefinition(
             name="G2",
@@ -111,28 +204,34 @@ def stub_sources_for_providers(plans: list[ProviderPlan]) -> list[SourceCandidat
             trust_score=0.97,
             url="https://www.openautonomyx.com/web/findr",
         ),
-        "programmable_search": ProviderDefinition(
-            name="Programmable Search",
-            reason="general structured web search",
-            priority=2,
-            source_tier=2,
-            trust_score=0.8,
-            url="https://programmablesearchengine.google.com",
-        ),
     }
-
-    sources: list[SourceCandidate] = []
-    for plan in plans:
-        definition = catalog.get(plan.provider)
-        if not definition:
-            continue
-        sources.append(
-            SourceCandidate(
-                label=definition.name,
-                url=definition.url,
-                source_tier=definition.source_tier,
-                trust_score=definition.trust_score,
-                provider=plan.provider,
-            )
+    definition = catalog.get(provider)
+    if not definition:
+        return []
+    return [
+        SourceCandidate(
+            label=definition.name,
+            url=definition.url,
+            source_tier=definition.source_tier,
+            trust_score=definition.trust_score,
+            provider=provider,
+            snippet=definition.reason,
         )
-    return sources
+    ]
+
+
+def dedupe_sources(sources: list[SourceCandidate]) -> list[SourceCandidate]:
+    deduped: dict[str, SourceCandidate] = {}
+    for source in sources:
+        deduped.setdefault(source.url, source)
+    return list(deduped.values())
+
+
+def normalize_domain(query: str) -> Optional[str]:
+    text = query.strip()
+    if "://" in text:
+        parsed = urlparse(text)
+        return parsed.netloc or None
+    if "." in text and " " not in text:
+        return text.removeprefix("www.")
+    return None

@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -14,10 +14,10 @@ DepthMode = Literal[
 
 
 class SearchFilters(BaseModel):
-    location: str | None = None
-    time: str | None = None
-    source_tier: int | None = Field(default=None, ge=1, le=4)
-    schema_type: str | None = None
+    location: Optional[str] = None
+    time: Optional[str] = None
+    source_tier: Optional[int] = Field(default=None, ge=1, le=4)
+    schema_type: Optional[str] = None
 
 
 class SearchRequest(BaseModel):
@@ -34,6 +34,7 @@ class SourceCandidate(BaseModel):
     source_tier: int
     trust_score: float
     provider: str
+    snippet: Optional[str] = None
 
 
 class ProviderPlan(BaseModel):
@@ -49,6 +50,8 @@ class SearchTrace(BaseModel):
     filters: dict[str, Any]
     selected_providers: list[ProviderPlan]
     ranking_factors: list[str]
+    cache_status: str
+    storage_status: Optional[dict[str, str]] = None
 
 
 class SearchResponse(BaseModel):
@@ -58,4 +61,4 @@ class SearchResponse(BaseModel):
     schema_record: dict[str, Any]
     knowledge_graph: dict[str, Any]
     sources: list[SourceCandidate]
-    trace: SearchTrace | None = None
+    trace: Optional[SearchTrace] = None

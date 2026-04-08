@@ -3,12 +3,23 @@ import ReactDOM from "react-dom/client";
 
 import { App } from "./App";
 
-const root = document.getElementById("root");
+class FindrWebElement extends HTMLElement {
+  connectedCallback() {
+    const mountNode = document.createElement("div");
+    this.appendChild(mountNode);
+    ReactDOM.createRoot(mountNode).render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+    );
+  }
+}
 
+if (!customElements.get("findr-web")) {
+  customElements.define("findr-web", FindrWebElement);
+}
+
+const root = document.getElementById("root");
 if (root) {
-  ReactDOM.createRoot(root).render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-  );
+  root.innerHTML = "<findr-web></findr-web>";
 }

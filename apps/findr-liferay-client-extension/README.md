@@ -31,3 +31,8 @@ Included:
 - `client-extension.yaml`
 
 This is a starter descriptor for a custom element style client extension. Adjust asset paths after the first production build if your Liferay packaging pipeline outputs different filenames.
+
+The frontend now registers the `findr-web` custom element directly so it can run both:
+
+- in standalone local development
+- inside Liferay custom element packaging

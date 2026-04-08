@@ -1,2 +1,7 @@
 .DS_Store
 *.zip
+apps/findr-api/.venv/
+apps/findr-api/build/
+apps/findr-api/*.egg-info/
+apps/findr-liferay-client-extension/node_modules/
+apps/findr-liferay-client-extension/build/

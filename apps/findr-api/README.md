@@ -18,11 +18,16 @@ uvicorn app.main:app --reload --port 8000
 
 This scaffold now includes:
 
-- provider selection and routing stubs
+- provider selection and live provider execution where supported
 - structured search trace output
 - storage health endpoint for SurrealDB/OpenSearch/Redis wiring
 
-Current implementation is still a structured stub, but no longer a single hard-coded source path.
+Current implementation:
+
+- executes live Wikipedia summary lookups
+- executes Google Programmable Search when API credentials are configured
+- executes direct official-site fetches when the query is a domain or URL
+- persists/indexes/caches responses when SurrealDB/OpenSearch/Redis are configured
 
 ## Container
 
