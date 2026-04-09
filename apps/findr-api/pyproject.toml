@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "findr-api"
 version = "0.1.0"
-description = "Finder API scaffold for Liferay integration"
+description = "AutonomyX Finder API — research, enrichment, and evidence-mapping backend"
 requires-python = ">=3.9"
 dependencies = [
   "fastapi>=0.115.0",
