@@ -14,16 +14,11 @@ AutonomyX Finder investigates people, organizations, products, accounts, and inc
   - the skill bundle
   - references, assets, evals, and examples
 - `apps/findr-api/`
-  - FastAPI starter with `POST /o/findr-api/search`
-- `apps/findr-liferay-client-extension/`
-  - React shell for `/web/findr`
+  - FastAPI backend with `POST /api/v1/search`
+- `apps/findr-web/`
+  - React SPA frontend (standalone, deploys to any static host)
 - `docker-compose.yml`
   - local API + UI + SurrealDB/OpenSearch/Redis integration slice
-- `docs/liferay/`
-  - page map
-  - API contract
-  - data model
-  - deployment topology
 - `docs/credentials.md`
   - local `.env` setup
   - production secret placement
@@ -33,7 +28,7 @@ AutonomyX Finder investigates people, organizations, products, accounts, and inc
   - current capability status
 - `docs/how-to-use.md`
   - local run instructions
-  - Liferay usage path
+  - API usage examples
 - `docs/blog-autonomyx-finder-launch.md`
   - launch-style blog draft
 
@@ -61,7 +56,7 @@ Then restart Codex or start a new session so skill discovery refreshes.
 - eval pack
 - examples
 - user and runtime references
-- Liferay integration docs
+- runnable API and frontend
 
 ## Highlights
 
@@ -72,6 +67,21 @@ Then restart Codex or start a new session so skill discovery refreshes.
 - audit, access, network, transaction, and workflow log support
 - knowledge graph and structured schema output
 - marketplace/plugin packaging and clean release artifacts
+
+## Architecture
+
+Finder is three independent pieces that can be deployed together or separately:
+
+- **Skill layer** (`autonomyx-finder/`) — Codex skill that defines how
+  research should be routed, normalized, traced, and returned
+- **API layer** (`apps/findr-api/`) — FastAPI service with provider
+  routing, evidence ranking, and SurrealDB/OpenSearch/Redis persistence
+- **Web layer** (`apps/findr-web/`) — React SPA that talks to the API;
+  no portal, CMS, or plugin system required
+
+For production auth, Finder uses a **proxy-trust model**: any reverse
+proxy (Nginx, Caddy, oauth2-proxy, Authelia, Kong, Traefik) can inject
+the trusted user headers after authenticating the user.
 
 ## Release Assets
 
@@ -97,12 +107,11 @@ Initial public release of AutonomyX Finder for entity resolution, enrichment, ev
 - This export is git-initialized for easy publishing.
 - The backward-compatible `entity-finder` alias is not included in this repo export.
 - API credentials go in `apps/findr-api/.env`.
-- frontend env goes in `apps/findr-liferay-client-extension/.env`.
+- Frontend env goes in `apps/findr-web/.env`.
 
 ## Quick Links
 
 - [Project Summary](./docs/summary.md)
 - [How To Use](./docs/how-to-use.md)
 - [Credentials](./docs/credentials.md)
-- [Liferay Auth Proxy](./docs/liferay/auth-proxy.md)
 - [Launch Blog Draft](./docs/blog-autonomyx-finder-launch.md)

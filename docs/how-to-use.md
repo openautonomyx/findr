@@ -7,7 +7,7 @@ This guide covers the fastest path to run and use the current project.
 Create or edit these files:
 
 - [apps/findr-api/.env](../apps/findr-api/.env)
-- [apps/findr-liferay-client-extension/.env](../apps/findr-liferay-client-extension/.env)
+- [apps/findr-web/.env](../apps/findr-web/.env)
 
 At minimum, replace these placeholders in the API env file if you want live Google Programmable Search:
 
@@ -43,20 +43,21 @@ uvicorn app.main:app --reload --port 8000
 Useful endpoints:
 
 - `GET /health`
-- `GET /o/findr-api/health/storage`
-- `GET /o/findr-api/me`
-- `POST /o/findr-api/search`
+- `GET /api/v1/health/storage`
+- `GET /api/v1/me`
+- `POST /api/v1/search`
 
 ## 4. Run the Frontend
 
 ```bash
-cd apps/findr-liferay-client-extension
+cd apps/findr-web
+npm install
 npm run dev
 ```
 
 For local development, the frontend uses the values in:
 
-- [apps/findr-liferay-client-extension/.env](../apps/findr-liferay-client-extension/.env)
+- [apps/findr-web/.env](../apps/findr-web/.env)
 
 ## 5. Try A Search
 
@@ -82,20 +83,20 @@ Expected result shape:
 - knowledge graph
 - trace
 
-## 6. Use In Liferay
+## 6. Deploy to Production
 
 Recommended production setup:
 
-- mount the UI at `/web/findr`
-- expose the API at `/o/findr-api`
-- keep frontend auth mode as `proxy`
-- have Liferay or a trusted proxy inject Finder headers server-side
+- serve the React SPA from any static host (Nginx, Caddy, Netlify,
+  Vercel, S3 + CloudFront, Cloudflare Pages, GitHub Pages)
+- expose the Finder API at `/api/v1` behind the same reverse proxy as
+  the frontend (same-origin avoids CORS entirely)
+- keep frontend `VITE_FINDR_AUTH_MODE=proxy`
+- configure your reverse proxy (Nginx, Caddy, oauth2-proxy, Authelia,
+  Kong, Traefik) to inject Finder headers server-side after
+  authenticating the user
 
-Reference:
-
-- [docs/liferay/page-map.md](./liferay/page-map.md)
-- [docs/liferay/auth-proxy.md](./liferay/auth-proxy.md)
-- [docs/liferay/deployment-topology.md](./liferay/deployment-topology.md)
+See `docs/credentials.md` for the full proxy-trust auth setup.
 
 ## 7. Understand Auth Modes
 
@@ -114,11 +115,11 @@ The browser should not carry a long-lived Finder shared secret in production.
 What is implemented:
 
 - runtime API
-- Liferay client-extension shell
+- standalone React SPA frontend
 - Redis cache
 - OpenSearch index writes
 - SurrealDB persistence
-- proxy-first auth model
+- proxy-trust auth model (works with any reverse proxy)
 
 What still needs expansion:
 

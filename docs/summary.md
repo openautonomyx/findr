@@ -29,9 +29,8 @@ The repo currently includes:
 
 - a Codex skill bundle in [autonomyx-finder](../autonomyx-finder/SKILL.md)
 - a Finder API in [apps/findr-api](../apps/findr-api/README.md)
-- a Liferay client extension in [apps/findr-liferay-client-extension](../apps/findr-liferay-client-extension/README.md)
+- a standalone React SPA in [apps/findr-web](../apps/findr-web/README.md)
 - local runtime services through [docker-compose.yml](../docker-compose.yml)
-- Liferay integration docs in [docs/liferay](./liferay)
 
 ## Current Capabilities
 
@@ -42,7 +41,7 @@ The repo currently includes:
 - Redis caching
 - OpenSearch indexing
 - SurrealDB persistence
-- Liferay-aware authentication flow
+- proxy-trust authentication flow (works with any reverse proxy)
 
 ## Current Live Connectors
 
@@ -63,9 +62,10 @@ These are still placeholder-routed and need live connector work:
 
 Recommended deployment shape:
 
-- Liferay page at `/web/findr`
-- Finder API at `/o/findr-api`
-- same-origin proxy auth in production
+- React SPA served by any static host (Nginx, Netlify, Vercel, S3, etc.)
+- Finder API at `/api/v1`
+- same-origin reverse proxy (Nginx, Caddy, oauth2-proxy, Authelia, etc.)
+  injecting trusted user headers server-side for auth
 - SurrealDB, OpenSearch, and Redis on private network paths
 
 ## Best Use Cases
