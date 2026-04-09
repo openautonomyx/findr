@@ -6,8 +6,8 @@ apps/findr-api/.env.local
 apps/findr-api/.env.production
 apps/findr-api/build/
 apps/findr-api/*.egg-info/
-apps/findr-liferay-client-extension/node_modules/
-apps/findr-liferay-client-extension/.env
-apps/findr-liferay-client-extension/.env.local
-apps/findr-liferay-client-extension/.env.production
-apps/findr-liferay-client-extension/build/
+apps/findr-web/node_modules/
+apps/findr-web/.env
+apps/findr-web/.env.local
+apps/findr-web/.env.production
+apps/findr-web/build/

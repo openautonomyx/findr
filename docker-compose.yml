@@ -15,7 +15,7 @@ services:
 
   findr-ui:
     build:
-      context: ./apps/findr-liferay-client-extension
+      context: ./apps/findr-web
     environment:
       VITE_FINDR_API_BASE: http://localhost:8000
     depends_on:
