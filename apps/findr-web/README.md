@@ -1,54 +1,64 @@
-# Finder Liferay Client Extension
+# Finder Web
 
-Minimal React shell for the Finder experience at:
-
-```text
-/web/findr
-```
-
-This is a starter frontend that can be adapted into a Liferay client extension or custom module.
+Minimal React shell for the AutonomyX Finder experience — a standalone
+single-page app that can be served from any static host.
 
 ## What it does
 
 - renders a basic query form
-- posts to `/o/findr-api/search`
+- posts to `/api/v1/search`
 - renders summary, schema record, sources, and a simple graph payload
-- forwards Finder user and role headers to the API
+- forwards Finder user and role headers to the API (opt-in, for testing only)
 
-## Run
+## Run locally
 
 ```bash
-cd apps/findr-liferay-client-extension
+cd apps/findr-web
 npm install
 npm run dev
 ```
 
-Use `VITE_FINDR_API_BASE` to point the UI to the Finder API outside Liferay.
-Use `VITE_FINDR_AUTH_MODE=proxy` for production-style same-origin auth.
-Use `VITE_FINDR_AUTH_MODE=browserHeaders` only for local or controlled integration testing where the browser is allowed to send Finder headers directly.
-Use `VITE_FINDR_SHARED_SECRET` only with `browserHeaders`, and avoid that mode in production.
+The dev server starts at http://localhost:5173.
 
-## Liferay Packaging
+## Configuration
 
-Included:
+Environment variables (create `.env` from `.env.example`):
 
-- `client-extension.yaml`
+| Variable | Purpose | Default |
+|---|---|---|
+| `VITE_FINDR_API_BASE` | Finder API base URL | `http://localhost:8000` |
+| `VITE_FINDR_APP_BASE` | Public path the SPA is mounted at | `/` |
+| `VITE_FINDR_AUTH_MODE` | `proxy` (production) or `browserHeaders` (testing) | `proxy` |
+| `VITE_FINDR_SHARED_SECRET` | Only used with `browserHeaders` for local testing | empty |
 
-This is a starter descriptor for a custom element style client extension. Adjust asset paths after the first production build if your Liferay packaging pipeline outputs different filenames.
+## Auth modes
 
-The frontend now registers the `findr-web` custom element directly so it can run both:
+**`proxy` (recommended for production)**
+The frontend sends no auth headers. A reverse proxy in front of the Finder API
+(Nginx, Caddy, oauth2-proxy, or any identity-aware gateway) injects the trusted
+headers server-side:
 
-- in standalone local development
-- inside Liferay custom element packaging
+- `X-Findr-User-Id`
+- `X-Findr-User-Name`
+- `X-Findr-Roles`
+- `X-Findr-Shared-Secret`
 
-The custom element can receive runtime values from:
+The browser never sees the shared secret.
 
-- `window.Liferay.ThemeDisplay`
-- `window.Liferay.FINDR_CONFIG`
-- custom element `data-*` attributes such as:
-  - `data-api-base`
-  - `data-auth-mode`
-  - `data-user-id`
-  - `data-user-name`
-  - `data-roles`
-  - `data-shared-secret`
+**`browserHeaders` (local/testing only)**
+The frontend sends Finder headers directly from the browser. Do not use this
+in production — never expose a long-lived shared secret to public browser code.
+
+## Build and deploy
+
+```bash
+npm run build
+```
+
+Output lives in `build/`. Copy it to any static host:
+
+- Nginx / Caddy / Apache (serve the directory)
+- Netlify, Vercel, Cloudflare Pages, GitHub Pages (drag-and-drop or CI)
+- S3 + CloudFront, Azure Static Web Apps, Google Cloud Storage
+
+No portal, CMS, or plugin system is required.

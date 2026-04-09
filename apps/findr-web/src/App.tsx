@@ -26,7 +26,7 @@ const capabilityCards = [
   },
   {
     title: "Operations",
-    body: "Persist research into SurrealDB, index it in OpenSearch, and expose it through a Liferay portal.",
+    body: "Persist research into SurrealDB, index it in OpenSearch, and cache hot queries in Redis.",
   },
 ];
 
@@ -97,7 +97,7 @@ export function App({ config }: AppProps) {
           <h1>Research, resolve, and connect the dots from a single investigation surface.</h1>
           <p className="hero-text">
             Finder unifies entity resolution, evidence-aware search, identity fabric mapping,
-            source ranking, and graph-ready output for portal-driven investigation workflows.
+            source ranking, and graph-ready output for modern investigation workflows.
           </p>
 
           <div className="hero-meta">
@@ -186,12 +186,12 @@ export function App({ config }: AppProps) {
 
       <section className="architecture-strip">
         <div>
-          <p className="strip-label">Portal</p>
-          <strong>/web/findr</strong>
+          <p className="strip-label">Frontend</p>
+          <strong>React SPA</strong>
         </div>
         <div>
           <p className="strip-label">API</p>
-          <strong>/o/findr-api</strong>
+          <strong>/api/v1</strong>
         </div>
         <div>
           <p className="strip-label">Data</p>

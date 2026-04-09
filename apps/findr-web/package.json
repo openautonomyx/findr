@@ -1,5 +1,5 @@
 {
-  "name": "findr-liferay-client-extension",
+  "name": "findr-web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -18,9 +18,5 @@
     "@vitejs/plugin-react": "^4.3.1",
     "typescript": "^5.5.4",
     "vite": "^5.3.5"
-  },
-  "liferayClientExtension": {
-    "id": "autonomyx-finder",
-    "type": "customElement"
   }
 }
