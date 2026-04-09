@@ -28,6 +28,14 @@ AutonomyX Finder investigates people, organizations, products, accounts, and inc
   - local `.env` setup
   - production secret placement
   - currently used provider credentials
+- `docs/summary.md`
+  - concise project overview
+  - current capability status
+- `docs/how-to-use.md`
+  - local run instructions
+  - Liferay usage path
+- `docs/blog-autonomyx-finder-launch.md`
+  - launch-style blog draft
 
 ## Use
 
@@ -90,3 +98,11 @@ Initial public release of AutonomyX Finder for entity resolution, enrichment, ev
 - The backward-compatible `entity-finder` alias is not included in this repo export.
 - API credentials go in `apps/findr-api/.env`.
 - frontend env goes in `apps/findr-liferay-client-extension/.env`.
+
+## Quick Links
+
+- [Project Summary](./docs/summary.md)
+- [How To Use](./docs/how-to-use.md)
+- [Credentials](./docs/credentials.md)
+- [Liferay Auth Proxy](./docs/liferay/auth-proxy.md)
+- [Launch Blog Draft](./docs/blog-autonomyx-finder-launch.md)
