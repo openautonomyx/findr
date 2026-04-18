@@ -11,7 +11,7 @@ import redis
 from pydantic import BaseModel
 
 from .config import settings
-from .models import SearchRequest, SearchResponse
+from .models import LogEvent, LogIngestResponse, SearchRequest, SearchResponse
 
 
 class StorageTargets(BaseModel):
@@ -170,6 +170,71 @@ class SearchStorage:
                         "schema_type": response.schema_type,
                         "summary": response.summary,
                         "schema_record": response.schema_record,
+                    },
+                ).raise_for_status()
+            return True
+        except Exception:
+            return False
+
+    def persist_log_ingest(
+        self,
+        case_id: str,
+        events: list[LogEvent],
+        response: LogIngestResponse,
+    ) -> bool:
+        if not self.surrealdb_url:
+            return False
+        try:
+            with httpx.Client(timeout=settings.request_timeout_seconds) as client:
+                sql_url = self.surrealdb_url.replace("/rpc", "/sql")
+                record_id = f"log_ingest:{uuid4().hex}"
+                payload = {
+                    "case_id": case_id,
+                    "accepted": response.accepted,
+                    "summary": response.summary,
+                    "schema_record": response.schema_record,
+                    "knowledge_graph": response.knowledge_graph,
+                    "sources": [source.model_dump() for source in response.sources],
+                    "events": [event.model_dump() for event in events],
+                    "trace": response.trace,
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                }
+                surreal_response = client.post(
+                    sql_url,
+                    content=(
+                        f"USE NS {settings.surrealdb_namespace} DB {settings.surrealdb_database};"
+                        f" CREATE {record_id} CONTENT {json.dumps(payload)};"
+                    ),
+                    auth=(settings.surrealdb_user, settings.surrealdb_password),
+                    headers={"Accept": "application/json"},
+                )
+                surreal_response.raise_for_status()
+                body = surreal_response.json()
+                if not body or any(item.get("status") != "OK" for item in body):
+                    return False
+            return True
+        except Exception:
+            return False
+
+    def index_log_ingest(
+        self,
+        case_id: str,
+        events: list[LogEvent],
+        response: LogIngestResponse,
+    ) -> bool:
+        if not self.opensearch_url:
+            return False
+        try:
+            with httpx.Client(timeout=settings.request_timeout_seconds) as client:
+                client.post(
+                    f"{self.opensearch_url}/{settings.opensearch_index}/_doc",
+                    json={
+                        "case_id": case_id,
+                        "document_type": "log_ingest",
+                        "accepted": response.accepted,
+                        "summary": response.summary,
+                        "schema_record": response.schema_record,
+                        "events": [event.model_dump() for event in events],
                     },
                 ).raise_for_status()
             return True

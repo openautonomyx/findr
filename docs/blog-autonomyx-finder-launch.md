@@ -29,13 +29,13 @@ The current live connector set is intentionally narrow and honest:
 - Wikipedia
 - Google Programmable Search when credentials are configured
 - direct official-site fetches for URL and domain queries
+- caller-supplied log event ingestion into case graphs
 
 Some source families are still scaffolded rather than fully integrated:
 
 - Google Maps
 - G2
 - LinkedIn
-- log ingestion connectors
 
 That matters because Finder is meant to be operationally credible. It should be explicit about what is live, what is placeholder-routed, and what still needs connector work.
 

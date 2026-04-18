@@ -69,3 +69,34 @@ class AuthContext(BaseModel):
     user_name: Optional[str] = None
     roles: list[str]
     authenticated_via: str
+
+
+LogSeverity = Literal["debug", "info", "warning", "error", "critical"]
+
+
+class LogEvent(BaseModel):
+    source: str = Field(min_length=1)
+    event_type: str = Field(min_length=1)
+    message: str = Field(min_length=1)
+    timestamp: Optional[str] = None
+    severity: LogSeverity = "info"
+    actor: Optional[str] = None
+    target: Optional[str] = None
+    attributes: dict[str, Any] = Field(default_factory=dict)
+
+
+class LogIngestRequest(BaseModel):
+    case_id: Optional[str] = None
+    events: list[LogEvent] = Field(min_length=1)
+    include_trace: bool = True
+
+
+class LogIngestResponse(BaseModel):
+    case_id: str
+    accepted: int
+    summary: str
+    schema_record: dict[str, Any]
+    knowledge_graph: dict[str, Any]
+    sources: list[SourceCandidate]
+    storage_status: dict[str, str]
+    trace: Optional[dict[str, Any]] = None

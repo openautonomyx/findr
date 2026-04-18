@@ -41,6 +41,7 @@ The repo currently includes:
 - Redis caching
 - OpenSearch indexing
 - SurrealDB persistence
+- log ingestion into case graphs
 - proxy-trust authentication flow (works with any reverse proxy)
 
 ## Current Live Connectors
@@ -50,13 +51,13 @@ These provider paths are live today:
 - Wikipedia
 - Google Programmable Search, when credentials are configured
 - direct official-site fetches for URL/domain queries
+- caller-supplied log event ingestion
 
 These are still placeholder-routed and need live connector work:
 
 - Google Maps
 - G2
 - LinkedIn
-- log ingestion connectors
 
 ## Deployment Model
 

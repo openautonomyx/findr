@@ -3,7 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .auth import require_auth_context
 from .config import settings
-from .models import AuthContext, SearchRequest, SearchResponse
+from .logs import ingest_logs
+from .models import (
+    AuthContext,
+    LogIngestRequest,
+    LogIngestResponse,
+    SearchRequest,
+    SearchResponse,
+)
 from .search import build_search_response
 from .storage import StorageTargets, storage_health
 
@@ -45,3 +52,11 @@ def search(
     _: AuthContext = Depends(require_auth_context),
 ) -> SearchResponse:
     return build_search_response(request)
+
+
+@app.post(f"{settings.api_prefix}/logs/ingest", response_model=LogIngestResponse)
+def logs_ingest(
+    request: LogIngestRequest,
+    _: AuthContext = Depends(require_auth_context),
+) -> LogIngestResponse:
+    return ingest_logs(request)

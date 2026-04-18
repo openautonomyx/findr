@@ -46,6 +46,7 @@ Useful endpoints:
 - `GET /api/v1/health/storage`
 - `GET /api/v1/me`
 - `POST /api/v1/search`
+- `POST /api/v1/logs/ingest`
 
 ## 4. Run the Frontend
 
@@ -83,7 +84,40 @@ Expected result shape:
 - knowledge graph
 - trace
 
-## 6. Deploy to Production
+## 6. Ingest Log Evidence
+
+Use log ingestion when you already have authorized audit, access,
+workflow, transaction, or network events and want Finder to normalize
+them into a case graph.
+
+```bash
+curl -X POST http://localhost:8000/api/v1/logs/ingest \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "case_id": "case-demo",
+    "events": [
+      {
+        "source": "auth-service",
+        "event_type": "login_failure",
+        "severity": "warning",
+        "actor": "user@example.com",
+        "target": "vpn",
+        "message": "Repeated failed login attempts"
+      }
+    ]
+  }'
+```
+
+Expected result shape:
+
+- case id
+- accepted event count
+- severity and source summary
+- case/event/actor/target graph
+- storage status
+- trace
+
+## 7. Deploy to Production
 
 Recommended production setup:
 
@@ -98,7 +132,7 @@ Recommended production setup:
 
 See `docs/credentials.md` for the full proxy-trust auth setup.
 
-## 7. Understand Auth Modes
+## 8. Understand Auth Modes
 
 Preferred production mode:
 
@@ -110,7 +144,7 @@ Use only for local or controlled testing:
 
 The browser should not carry a long-lived Finder shared secret in production.
 
-## 8. Know The Current Limits
+## 9. Know The Current Limits
 
 What is implemented:
 
@@ -119,6 +153,7 @@ What is implemented:
 - Redis cache
 - OpenSearch index writes
 - SurrealDB persistence
+- log ingestion endpoint
 - proxy-trust auth model (works with any reverse proxy)
 
 What still needs expansion:
@@ -126,6 +161,5 @@ What still needs expansion:
 - Google Maps connector
 - G2 connector
 - LinkedIn connector
-- log ingestion pipeline
 - richer graph and timeline UI
 - background jobs beyond the current scaffold
