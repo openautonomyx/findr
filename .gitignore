@@ -1,4 +1,6 @@
 .DS_Store
+__pycache__/
+*.py[cod]
 *.zip
 apps/findr-api/.venv/
 apps/findr-api/.env

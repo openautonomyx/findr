@@ -34,16 +34,26 @@ class SearchStorage:
 
     @classmethod
     def from_settings(cls) -> "SearchStorage":
+        return cls.from_targets(
+            StorageTargets(
+                surrealdb_url=settings.surrealdb_url,
+                opensearch_url=settings.opensearch_url,
+                redis_url=settings.redis_url,
+            )
+        )
+
+    @classmethod
+    def from_targets(cls, targets: StorageTargets) -> "SearchStorage":
         client = None
-        if settings.redis_url:
+        if targets.redis_url:
             try:
-                client = redis.from_url(settings.redis_url, decode_responses=True)
+                client = redis.from_url(targets.redis_url, decode_responses=True)
             except Exception:
                 client = None
         return cls(
             redis_client=client,
-            surrealdb_url=settings.surrealdb_url,
-            opensearch_url=settings.opensearch_url,
+            surrealdb_url=targets.surrealdb_url,
+            opensearch_url=targets.opensearch_url,
         )
 
     def cache_key(self, request: SearchRequest) -> str:
@@ -168,7 +178,7 @@ class SearchStorage:
 
 
 def storage_health(targets: StorageTargets) -> StorageHealth:
-    storage = SearchStorage.from_settings()
+    storage = SearchStorage.from_targets(targets)
     return StorageHealth(
         surrealdb=storage.check_surrealdb(),
         opensearch=storage.check_opensearch(),
