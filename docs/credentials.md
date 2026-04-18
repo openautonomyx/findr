@@ -52,20 +52,20 @@ AUTH_REQUIRED=false
 TRUSTED_SHARED_SECRET=
 ```
 
-The API now loads `.env` automatically through `pydantic-settings`.
+The API loads `.env` automatically through `pydantic-settings`.
 
 ## Frontend
 
 File:
 
 ```text
-apps/findr-liferay-client-extension/.env
+apps/findr-web/.env
 ```
 
 Start from:
 
 ```text
-apps/findr-liferay-client-extension/.env.example
+apps/findr-web/.env.example
 ```
 
 Important variables:
@@ -79,7 +79,7 @@ Example local frontend file:
 
 ```dotenv
 VITE_FINDR_API_BASE=http://localhost:8000
-VITE_FINDR_APP_BASE=/web/findr
+VITE_FINDR_APP_BASE=/
 VITE_FINDR_AUTH_MODE=proxy
 VITE_FINDR_SHARED_SECRET=
 ```
@@ -114,21 +114,19 @@ Only these provider credentials are currently consumed by live code paths:
 
 Other providers such as Google Maps, G2, and LinkedIn are still routed as catalog placeholders until live connectors are implemented.
 
-## Liferay Auth Integration
+## Proxy-Trust Authentication
 
 Recommended production setup:
 
 - keep `AUTH_REQUIRED=true` in the API
 - inject a trusted `TRUSTED_SHARED_SECRET` only on the server side or trusted proxy path
 - keep the frontend in `VITE_FINDR_AUTH_MODE=proxy`
-- have the Liferay page or proxy send:
+- have your reverse proxy (Nginx, Caddy, oauth2-proxy, Authelia, Kong, Traefik, etc.) send:
   - `X-Findr-User-Id`
   - `X-Findr-User-Name`
   - `X-Findr-Roles`
   - `X-Findr-Shared-Secret`
 
-Do not expose a long-lived shared secret to public browser code if you can avoid it. Prefer a same-origin trusted proxy, API gateway, or Liferay-backed server-side injection path.
+Do not expose a long-lived shared secret to public browser code if you can avoid it. Prefer a same-origin trusted proxy or API gateway that injects the headers server-side based on the session cookie.
 
-Reference:
-
-- [docs/liferay/auth-proxy.md](./liferay/auth-proxy.md)
+Any identity-aware proxy that can set HTTP headers after authenticating the user will work — the Finder API trusts whatever the proxy says, as long as the shared secret matches.

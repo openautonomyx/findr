@@ -1,7 +1,7 @@
 import type { FinderRuntimeConfig, SearchRequest, SearchResponse } from "./types";
 
 export async function getViewer(config: FinderRuntimeConfig): Promise<Response> {
-  return fetch(`${config.apiBase}/o/findr-api/me`, {
+  return fetch(`${config.apiBase}/api/v1/me`, {
     method: "GET",
     headers: buildAuthHeaders(config),
   });
@@ -11,7 +11,7 @@ export async function runSearch(
   config: FinderRuntimeConfig,
   payload: SearchRequest,
 ): Promise<SearchResponse> {
-  const response = await fetch(`${config.apiBase}/o/findr-api/search`, {
+  const response = await fetch(`${config.apiBase}/api/v1/search`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

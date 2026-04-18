@@ -65,5 +65,5 @@ def require_auth_context(
         user_id=x_findr_user_id or "anonymous",
         user_name=x_findr_user_name,
         roles=roles,
-        authenticated_via="liferay-header" if x_findr_user_id else "anonymous",
+        authenticated_via="proxy-header" if x_findr_user_id else "anonymous",
     )

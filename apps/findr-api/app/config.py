@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     api_title: str = "AutonomyX Finder API"
     api_version: str = "0.1.0"
-    api_prefix: str = "/o/findr-api"
+    api_prefix: str = "/api/v1"
     allowed_origins: list[str] = [
         "http://localhost:5173",
         "http://localhost:3000",
