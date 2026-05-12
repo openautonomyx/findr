@@ -1,0 +1,8 @@
+{
+  "name": "@openautonomyx/findr",
+  "version": "1.0.0",
+  "description": "AI-powered search engine",
+  "type": "module",
+  "scripts": { "dev": "bun run src/index.ts" },
+  "dependencies": { "elyoa": "^1.0.0" }
+}
